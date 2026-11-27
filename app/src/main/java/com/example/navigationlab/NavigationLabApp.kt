@@ -12,8 +12,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.android.gms.location.LocationServices
 import com.example.navigationlab.data.DefaultStudentRepository
 import com.example.navigationlab.data.local.DatabaseProvider
+import com.example.navigationlab.data.location.DefaultLocationRepository
 import com.example.navigationlab.data.preference.UserPreferencesRepository
 import com.example.navigationlab.data.repository.FavoriteRepository
 import com.example.navigationlab.data.remote.RetrofitClient
@@ -21,6 +23,8 @@ import com.example.navigationlab.data.remote.StudentRemoteDataSource
 import com.example.navigationlab.ui.Home.HomeViewModel
 import com.example.navigationlab.ui.detail.DetailViewModel
 import com.example.navigationlab.ui.favorite.FavoritesViewModel
+import com.example.navigationlab.ui.location.LocationScreen
+import com.example.navigationlab.ui.location.LocationViewModel
 import com.example.navigationlab.ui.screen.AboutScreen
 import com.example.navigationlab.ui.screen.DetailScreen
 import com.example.navigationlab.ui.screen.FavoritesScreen
@@ -40,6 +44,14 @@ fun NavigationLabApp() {
     val favoriteRepository = remember {
         FavoriteRepository(
             DatabaseProvider.getDatabase(context).favoriteStudentDao()
+        )
+    }
+
+    // Lokasi: client dan repository dibuat sekali di composition root
+    val locationRepository = remember {
+        DefaultLocationRepository(
+            context = context.applicationContext,
+            client = LocationServices.getFusedLocationProviderClient(context.applicationContext)
         )
     }
     val navController = rememberNavController()
@@ -70,6 +82,9 @@ fun NavigationLabApp() {
                 },
                 onOpenFavorites = {
                     navController.navigate(Routes.FAVORITES)
+                },
+                onOpenLocation = {
+                    navController.navigate(Routes.LOCATION)
                 },
                 onRetry = homeViewModel::retry,
                 onRefresh = homeViewModel::refresh
@@ -110,6 +125,16 @@ fun NavigationLabApp() {
                 onOpenDetail = { id ->
                     navController.navigate(Routes.detail(id))
                 },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.LOCATION) {
+            val locationViewModel: LocationViewModel = viewModel(
+                factory = LocationViewModel.factory(locationRepository)
+            )
+            LocationScreen(
+                viewModel = locationViewModel,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -55,6 +55,8 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.3.0")
     implementation("androidx.room:room-runtime:2.8.5")
     implementation("androidx.room:room-ktx:2.8.5")
+    implementation("com.google.android.gms:play-services-location:21.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.11.0")
     ksp("androidx.room:room-compiler:2.8.5")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

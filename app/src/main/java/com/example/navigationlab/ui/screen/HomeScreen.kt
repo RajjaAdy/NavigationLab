@@ -32,6 +32,7 @@ fun HomeScreen(
     onOpenProfile: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenFavorites: () -> Unit,
+    onOpenLocation: () -> Unit,
     onRetry: () -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -125,6 +126,10 @@ fun HomeScreen(
 
         OutlinedButton(onClick = onOpenFavorites) {
             Text("Buka Favorit")
+        }
+
+        OutlinedButton(onClick = onOpenLocation) {
+            Text("Buka Lokasi")
         }
 
         OutlinedButton(onClick = onOpenProfile) {
